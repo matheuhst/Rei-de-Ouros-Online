@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: concurso-beleza-online
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    healthCheckPath: /health

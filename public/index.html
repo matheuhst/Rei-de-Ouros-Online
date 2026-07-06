@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07111f" />
+  <title>Concurso de Beleza Online</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="suit-mark suit-mark-1">♦</div>
+  <div class="suit-mark suit-mark-2">♦</div>
+  <div class="suit-mark suit-mark-3">♦</div>
+
+  <div class="app">
+    <header class="hero">
+      <p class="eyebrow">Jogo de Ouros</p>
+      <h1>Concurso de Beleza Online</h1>
+      <p class="hero-note"><span class="diamond">♦</span> Crie uma sala, envie o código para outra pessoa e joguem em tempo real.</p>
+
+      <div class="hero-actions">
+        <button id="themeToggleBtn" type="button" class="theme-toggle" aria-pressed="false">
+          Modo dark
+        </button>
+
+        <button id="rulesBtn" type="button" class="rules-open-btn">
+          Regras do jogo
+        </button>
+      </div>
+    </header>
+
+    <section id="setup" class="setup-panel">
+      <div class="setup-title">
+        <p class="eyebrow">Entrada</p>
+        <h2>Preparar partida</h2>
+      </div>
+
+      <div class="setup-grid">
+        <label>
+          <span>Seu nome</span>
+          <input id="playerNameInput" type="text" maxlength="18" placeholder="Evandro" />
+        </label>
+
+        <label>
+          <span>Código da sala</span>
+          <input id="roomCodeInput" type="text" maxlength="4" placeholder="ABCD" />
+        </label>
+      </div>
+
+      <div class="setup-actions">
+        <button id="createRoomBtn" type="button" class="btn">Criar sala</button>
+        <button id="joinRoomBtn" type="button" class="btn secondary-btn">Entrar na sala</button>
+      </div>
+
+      <section id="lobbyBox" class="lobby-box hidden">
+        <div>
+          <p class="eyebrow">Sala</p>
+          <h3 id="roomCodeDisplay">----</h3>
+          <p id="lobbyMessage">Envie esse código para o outro jogador.</p>
+        </div>
+
+        <div id="lobbyPlayers" class="lobby-players"></div>
+
+        <button id="startGameBtn" type="button" class="btn hidden">Iniciar partida</button>
+      </section>
+
+      <p id="setupMessage" class="message"></p>
+    </section>
+
+    <main id="game" class="game hidden">
+      <section id="activeRulesPanel" class="active-rules-panel hidden">
+        <p class="eyebrow">Regras ativas</p>
+        <div id="activeRulesList" class="active-rules-list"></div>
+      </section>
+
+      <section id="choicePanel" class="choice-panel hidden">
+        <p id="roundMeta" class="eyebrow">Rodada 1</p>
+        <h2 id="currentPlayerName">Sua escolha</h2>
+        <p id="turnDescription">Escolha um número de 0 a 100.</p>
+
+        <div class="number-picker" aria-label="Escolha um número de 0 a 100">
+          <div id="numberGrid" class="number-grid"></div>
+        </div>
+
+        <p id="message" class="message"></p>
+      </section>
+
+      <section id="arenaBoard" class="arena-board hidden">
+        <div class="phase-head">
+          <p id="phaseLabel" class="eyebrow">Sistema</p>
+          <h2 id="phaseTitle">Revelando escolhas</h2>
+          <p id="phaseDescription">Os números serão exibidos um por vez.</p>
+        </div>
+
+        <div id="mathLine" class="math-line hidden">
+          <span id="mathExpression"></span>
+          <strong id="mathResult"></strong>
+        </div>
+
+        <div id="playersBoard" class="players-board"></div>
+
+        <button id="nextRoundBtn" type="button" class="btn next-round-btn hidden">
+          Próxima rodada
+        </button>
+      </section>
+    </main>
+
+    <div id="rulesModal" class="rules-modal hidden" aria-hidden="true">
+      <div class="rules-modal-backdrop" data-close-rules></div>
+
+      <div class="rules-modal-box" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+        <button id="closeRulesBtn" type="button" class="rules-close-btn" aria-label="Fechar regras">
+          ×
+        </button>
+
+        <p class="eyebrow">Jogo de Ouros</p>
+        <h2 id="rulesModalTitle">Regras do jogo</h2>
+
+        <div class="rules-content">
+          <article class="rules-section">
+            <strong>Regra base</strong>
+            <p>Cada jogador escolhe um número de 0 a 100. O sistema calcula a média de todos os números e multiplica por 0,8. Quem ficar mais perto do alvo vence a rodada.</p>
+          </article>
+
+          <article class="rules-section">
+            <strong>Pontuação</strong>
+            <p>Quem não vencer perde 1 ponto. Ao chegar em -10 pontos, o jogador é eliminado.</p>
+          </article>
+
+          <article class="rules-section">
+            <strong>Primeira regra adicional</strong>
+            <p>Quando restarem 4 jogadores ou menos, números repetidos ficam inválidos. Quem repetir número perde 2 pontos e não pode vencer a rodada.</p>
+          </article>
+
+          <article class="rules-section">
+            <strong>Segunda regra adicional</strong>
+            <p>Quando restarem 3 jogadores ou menos, se alguém acertar exatamente o alvo, a penalidade dos outros jogadores dobra. Números repetidos passam de -2 para -4.</p>
+          </article>
+
+          <article class="rules-section">
+            <strong>Duelo final</strong>
+            <p>Quando restarem 2 jogadores, o 0 decide: 0 perde para 100, mas vence qualquer outro número. O bot final escolhe entre 0, 1 ou 100.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div id="endModal" class="modal hidden">
+      <div class="modal-box">
+        <p class="eyebrow">Fim de jogo</p>
+        <h2 id="endTitle">Resultado</h2>
+        <p id="endText"></p>
+        <button id="playAgainBtn" type="button" class="btn">Voltar ao início</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts.js"></script>
+</body>
+</html>
